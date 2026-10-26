@@ -86,7 +86,7 @@ Parâmetros do catálogo: `q` (texto), `r` (raridades), `c` (cores), `cp=1` (só
   12 famílias (vermelho, laranja, amarelo/dourado, marrom, verde, ciano, azul, roxo, rosa, preto, cinza, branco).
   Pixels saturados pesam mais que neutros, para o metal da arma não dominar. O filtro aceita a cor principal ou uma
   secundária com ≥ 25% (ou só a principal, com a opção marcada). Resultado salvo em `localStorage` (`csk:colors:v1`).
-  A análise roda em fila (6 por vez), prioriza os cards visíveis e pausa sozinha após 25 falhas seguidas (offline/CORS).
+  A análise roda em fila (12 por vez, miniaturas de 96px, lembrando qual forma de carregar funcionou), prioriza os cards visíveis e pausa sozinha após 25 falhas seguidas (offline/CORS).
 
 ## Armazenamento local
 

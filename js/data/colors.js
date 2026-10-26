@@ -8,7 +8,9 @@ import { analyzePixels } from './colorAlgo.js';
 const KEY = 'colors:v1';
 const RETRY_FAIL_MS = 24 * 3600 * 1000;
 const SIZE = 48;
-const CONCURRENCY = 6;
+const CONCURRENCY = 12;
+// A CDN da Steam aceita um sufixo de tamanho; 96px basta para 48x48 e baixa bem menos.
+const THUMB = '/96fx96f';
 
 let cache = load(KEY, {}) || {};
 const listeners = new Set();
@@ -112,15 +114,26 @@ function readPixels(img) {
   return ctx.getImageData(0, 0, SIZE, SIZE).data; // lança SecurityError se o canvas estiver "contaminado"
 }
 
+// Estratégias em ordem; a que funcionou por último é tentada primeiro nas próximas,
+// para não gastar uma requisição falha por imagem (ex.: CDN sem CORS → vai direto ao proxy).
+let preferred = null;
+
 async function analyze(skin) {
   if (!skin.image) throw new Error('sem imagem');
-  const sources = [skin.image];
-  if (await checkProxy()) sources.push('img?u=' + encodeURIComponent(skin.image));
+  const thumb = skin.image + THUMB;
+  const proxy = (u) => 'img?u=' + encodeURIComponent(u);
+  const strategies = [
+    { id: 'thumb', src: thumb },
+    { id: 'full', src: skin.image },
+  ];
+  if (await checkProxy()) strategies.push({ id: 'proxy-thumb', src: proxy(thumb) }, { id: 'proxy-full', src: proxy(skin.image) });
+  if (preferred) strategies.sort((a, b) => (b.id === preferred) - (a.id === preferred));
   let lastErr;
-  for (const src of sources) {
+  for (const st of strategies) {
     try {
-      const result = analyzePixels(readPixels(await loadImage(src)));
+      const result = analyzePixels(readPixels(await loadImage(st.src)));
       if (!result) throw new Error('imagem vazia');
+      preferred = st.id;
       return result;
     } catch (e) {
       lastErr = e;
@@ -151,7 +164,7 @@ async function pump() {
         queued.delete(skin.id);
         persist();
         emit(skin.id);
-        setTimeout(pump, 30);
+        pump();
       });
   }
 }
