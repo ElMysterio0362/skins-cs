@@ -10,6 +10,11 @@ Fases 3 a 7 (marketplaces, preços, comparador, kits, favoritos, exportação, p
 
 Requer Node 18+ (só para o servidor local; o site em si é estático).
 
+**Windows:** dê dois cliques em `iniciar.bat`. Ele usa o Node portátil configurado na linha `set "NODE=..."`
+(ou o `node` instalado no sistema), sobe o servidor e abre o navegador em http://localhost:8080.
+
+Outros sistemas:
+
 ```bash
 node server.mjs        # http://localhost:8080
 # ou: PORT=3000 node server.mjs
