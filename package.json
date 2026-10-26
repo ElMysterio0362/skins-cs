@@ -1,0 +1,13 @@
+{
+  "name": "skins-cs",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Catálogo local de skins de CS2 com filtros por raridade e cor, kits e comparação de preços.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "build:catalog": "node scripts/build-catalog.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
