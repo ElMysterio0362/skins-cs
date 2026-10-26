@@ -32,6 +32,15 @@ Testes do algoritmo de cor: `npm test` (usa o `node:test`, sem instalar nada).
    para o `<canvas>` conseguir ler os pixels e calcular a cor dominante caso a CDN não envie cabeçalho CORS.
    O navegador sempre tenta a imagem direta primeiro; o proxy é só o plano B.
 
+## Publicar na Vercel
+
+O site é estático; `api/img.js` e `api/health.js` fazem na Vercel o papel do proxy de imagens do `server.mjs`
+(`vercel.json` liga `/img` a `/api/img`).
+
+1. Em vercel.com, **Add New → Project** e importe este repositório do GitHub.
+2. Framework Preset: **Other**. Deixe Build Command e Output Directory vazios.
+3. **Deploy**. Cada push na branch gera um deploy novo.
+
 ## Estrutura
 
 ```
