@@ -3,8 +3,8 @@
 Site local para explorar skins de CS2, montar kits e (nas próximas fases) comparar preços em marketplaces.
 Interface em português, HTML + CSS + JavaScript puro (ES modules), sem framework e sem dependências.
 
-**Status:** fases 1 e 2 prontas (estrutura, roteamento, tema, catálogo, busca, filtros, raridade e cor da skin).
-Fases 3 a 7 (marketplaces, preços, comparador, kits, favoritos, exportação, polimento) ainda não foram feitas.
+**Status:** fases 1 a 3 prontas (catálogo, filtros, cor da skin, registro de marketplaces e camada de preços com cache).
+Fases 4 a 7 (comparador por skin, kits, favoritos, exportação, polimento) ainda não foram feitas.
 
 ## Como rodar
 
@@ -103,16 +103,48 @@ Parâmetros do catálogo: `q` (texto), `r` (raridades), `c` (cores), `cp=1` (só
 | --- | --- | --- |
 | `csk:prefs` | localStorage | tema, aviso de armazenamento, análise automática de cores |
 | `csk:colors:v1` | localStorage | cor dominante por skin |
+| `csk:prices:v1` | localStorage | preços da Steam (cache 1 h), manuais e importados |
+| `csk:fx:v1` | localStorage | câmbio USD→BRL e data |
+| `csk:marketplaces:enabled` | localStorage | fontes ligadas/desligadas |
+| `skinport:v1` | IndexedDB | lista de preços da Skinport (grande demais para o localStorage) |
 | `catalog:v1` | IndexedDB | catálogo baixado via “Atualizar catálogo” (~2 MB, grande demais para o localStorage) |
 
 ## Marketplaces e preços
 
-Ainda não implementado (fase 3). Esta seção vai explicar como adicionar um marketplace em `marketplaces.json`
-e como atualizar preços e câmbio.
+### Fontes
+- **Mercado da Comunidade Steam** (BRL): endpoint público não oficial `priceoverview`, uma skin por vez,
+  no máximo 1 chamada a cada 3,5 s, pausa automática em 429.
+- **Skinport** (BRL): API pública oficial `/v1/items`, lista inteira numa chamada (limite 8 req / 5 min, exige Brotli).
+- **Sites brasileiros propostos** (DashSkins, Bleik Store, BRSkins, NeshaStore, CubeSKINs): ficam com `status: "proposto"`
+  e desligados até aprovação. Nenhum tem API pública conhecida, então entram por importação manual. As evidências e o nível
+  de confiança de cada um estão em `data/marketplaces.json` e na página *Comparador de sites*.
+
+As chamadas à Steam e à Skinport passam pelo servidor (`lib/upstream.mjs`, usado pelo `server.mjs` e por `api/*.js` na Vercel),
+porque o navegador não pode chamá-las direto (CORS). Abrindo com um servidor estático qualquer, essas fontes aparecem como
+"indisponível" e o resto do site continua funcionando.
+
+### Adicionar um marketplace
+Inclua um objeto em `data/marketplaces.json` com: `id`, `nome`, `url`, `pais` (`BR`/`internacional`), `moeda`,
+`tipo` (`marketplace`/`loja`/`steam`), `status` (`ativo`/`proposto`), `linkSkin` (modelo com `{market_hash_name}` ou `null`),
+`taxa.comprador.percentual` (ou `null` se desconhecida), `metodo` (`api`/`manual`/`scraping`) e
+`verificado: { data, observacao }`. Com `metodo: "manual"` ele já funciona com importação e preço manual.
+Para consulta automática, crie um adaptador em `js/prices/provider.js` (e, se precisar de servidor, uma função em `lib/upstream.mjs`).
+
+### Atualizar preços
+- Automático: ao abrir uma skin, as fontes com API são consultadas se o cache (1 h) venceu. *Atualizar preços* força.
+- *Comparador de sites → Atualizar Skinport agora / Limpar cache de API*.
+- Importação CSV/JSON (colunas `market_hash_name`, `source`, `price`, `currency`, `date`) em *Comparador de sites*.
+- Preço manual por skin na página da skin. Manuais e importados são sempre rotulados como tal, com data.
+
+### Câmbio
+USD→BRL via [AwesomeAPI](https://economia.awesomeapi.com.br) (*Comparador de sites → Atualizar cotação*) ou valor manual.
+A data da cotação aparece ao lado. Só é usado para preços importados em USD.
 
 ## Limitações atuais
 
-- Sem preços, kits, favoritos ou exportação (fases 3 a 7).
+- Sem comparador “mais barato”, kits, favoritos ou exportação (fases 4 a 7).
+- Preços da Steam e da Skinport não puderam ser testados contra as APIs reais no ambiente de desenvolvimento (testados com respostas simuladas).
+- Marketplaces não separam fases da Doppler no nome; o preço pode ser de outra fase.
 - A cor dominante é uma estimativa; skins multicoloridas ou com muito metal podem cair numa família inesperada.
 - Se a CDN de imagens da Steam não liberar CORS e o site não estiver rodando pelo `server.mjs`, o filtro por cor
   fica indisponível (o site avisa).

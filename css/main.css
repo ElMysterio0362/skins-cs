@@ -249,3 +249,31 @@ fieldset { border: 0; padding: 0; margin: 0 0 16px; }
 .notfound .big { font-size: 5rem; font-weight: 900; color: var(--accent); line-height: 1; }
 a.chip { text-decoration: none; color: var(--text); }
 a.chip:hover { border-color: var(--c, var(--accent)); }
+
+/* ===== Fase 3: tabelas, painéis, marketplaces ===== */
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.table th, .table td { padding: 8px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
+.table thead th { background: var(--surface-2); font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--text-dim); }
+.table tbody tr:last-child > * { border-bottom: 0; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: .75rem; border: 1px solid var(--border); background: var(--bg-2); white-space: nowrap; }
+.badge-ok { color: var(--ok); border-color: var(--ok); }
+.badge-warn { color: var(--warn); border-color: var(--warn); }
+.badge-err { color: var(--err); border-color: var(--err); }
+.badge-conf-alta, .badge-conf-media { color: var(--ok); border-color: var(--ok); }
+.badge-conf-baixa { color: var(--err); border-color: var(--err); }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 20px; }
+.panel h2 { font-size: 1.1rem; }
+.two-col { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.two-col .panel { margin-bottom: 0; }
+.two-col + .panel { margin-top: 20px; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0; }
+.input-sm { width: 130px; padding: 4px 8px; }
+textarea.input { font-family: ui-monospace, monospace; font-size: .85rem; resize: vertical; }
+.code { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; overflow-x: auto; }
+.proposals { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.proposal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+.proposal header { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.proposal h3 { margin: 0; font-size: 1.05rem; }
+.proposal ul { padding-left: 18px; margin: 8px 0; font-size: .88rem; color: var(--text-dim); }
+details > summary { cursor: pointer; }

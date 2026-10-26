@@ -5,6 +5,7 @@ import { getColor, requestColors, onColor, isFailed } from '../data/colors.js';
 import { buildHash } from '../router.js';
 import { setPageMeta } from '../ui/seo.js';
 import { renderNotFound } from './static.js';
+import { mountPricePanel } from '../ui/pricePanel.js';
 
 const fmtFloat = (v) => (v == null ? '—' : v.toFixed(2));
 
@@ -60,9 +61,9 @@ export function renderSkin(main, catalog, id) {
         </dl>
         ${s.desc ? `<p class="desc">${escapeHtml(s.desc)}</p>` : ''}
         ${s.notes.map((n) => `<div class="banner banner-warn">${escapeHtml(n)}</div>`).join('')}
-        <div class="banner" role="note">Comparação de preços entre lojas: disponível numa próxima fase. Nenhum preço é exibido ainda.</div>
       </div>
-    </article>`;
+    </article>
+    <section class="section panel" id="skin-prices" aria-label="Preços"></section>`;
 
   const off = onColor((cid) => {
     if (cid === s.id) {
@@ -70,6 +71,8 @@ export function renderSkin(main, catalog, id) {
       if (el) el.innerHTML = colorHtml(s);
     }
   });
-  return { destroy: off };
+  let offPrices = () => {};
+  mountPricePanel(main.querySelector('#skin-prices'), s).then((fn) => { offPrices = fn; });
+  return { destroy() { off(); offPrices(); } };
 }
 

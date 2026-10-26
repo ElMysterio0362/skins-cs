@@ -1,13 +1,15 @@
 // Servidor local opcional, sem dependências.
 // Motivos para existir:
 //  1. ES modules não funcionam abrindo index.html via file://; é preciso HTTP.
-//  2. /img?u=... repassa imagens da CDN da Steam para o <canvas> conseguir ler
+//  2. /api/skinport e /api/steam-price: consultam preços no servidor (CORS/limites).
+//  3. /img?u=... repassa imagens da CDN da Steam para o <canvas> conseguir ler
 //     os pixels (cor dominante) caso a CDN não envie cabeçalho CORS.
 // Uso: node server.mjs  (porta 8080, ou PORT=3000 node server.mjs)
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { skinportItems, steamPrice } from './lib/upstream.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT) || 8080;
@@ -73,6 +75,8 @@ createServer((req, res) => {
   const url = new URL(req.url, 'http://localhost');
   if (url.pathname === '/api/health') return send(res, 200, JSON.stringify({ ok: true, imgProxy: true }), MIME['.json']);
   if (url.pathname === '/img') return proxyImage(url.searchParams.get('u'), res);
+  if (url.pathname === '/api/skinport') return skinportItems().then((r) => { res.writeHead(r.status, r.headers); res.end(r.body); });
+  if (url.pathname === '/api/steam-price') return steamPrice(url.searchParams.get('name')).then((r) => { res.writeHead(r.status, r.headers); res.end(r.body); });
   if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, 'Método não permitido');
   return serveFile(url.pathname, res);
 }).listen(PORT, () => console.log(`Skins CS rodando em http://localhost:${PORT}`));

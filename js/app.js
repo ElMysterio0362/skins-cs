@@ -8,6 +8,7 @@ import { toast } from './ui/toast.js';
 import { renderHome } from './pages/home.js';
 import { renderCatalogPage } from './pages/catalog.js';
 import { renderSkin } from './pages/skin.js';
+import { renderSites } from './pages/sites.js';
 import { renderNotFound, renderPlanned, renderAbout, renderLegal } from './pages/static.js';
 
 const main = document.getElementById('main');
@@ -36,7 +37,12 @@ const withCatalog = (fn) => async (ctx) => {
     showError(err);
     return null;
   }
-  const res = fn(main, catalog, ctx);
+  // Container novo a cada visita: os eventos que a página registra nele somem junto
+  // com ele, sem acumular handlers de visitas anteriores no <main>.
+  const page = document.createElement('div');
+  page.className = 'page';
+  main.replaceChildren(page);
+  const res = await fn(page, catalog, ctx);
   focusMain();
   return res;
 };
@@ -53,7 +59,7 @@ route('/catalogo', withCatalog((m, c, { query }) => renderCatalogPage(m, c, quer
 route('/skin/:id', withCatalog((m, c, { params }) => renderSkin(m, c, params.id)));
 route('/kits', withCatalog((m) => renderPlanned(m, 'kits')));
 route('/favoritos', withCatalog((m) => renderPlanned(m, 'favoritos')));
-route('/sites', withCatalog((m) => renderPlanned(m, 'sites')));
+route('/sites', withCatalog((m) => renderSites(m)));
 route('/sobre', withCatalog((m, c) => {
   renderAbout(m, c);
   const btn = m.querySelector('#refresh-catalog');

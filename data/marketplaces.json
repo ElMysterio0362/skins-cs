@@ -1,0 +1,198 @@
+{
+  "versao": 1,
+  "atualizadoEm": "2026-10-26",
+  "observacao": "status 'ativo' = fonte em uso; 'proposto' = aguardando aprovação do dono do projeto. Evidências coletadas por busca na web em 2026-10-26; Trustpilot e Reclame Aqui não puderam ser abertos diretamente, então números vêm de resultados de busca e podem estar desatualizados.",
+  "marketplaces": [
+    {
+      "id": "steam",
+      "nome": "Mercado da Comunidade Steam",
+      "url": "https://steamcommunity.com/market/",
+      "pais": "internacional",
+      "moeda": "BRL",
+      "tipo": "steam",
+      "status": "ativo",
+      "linkSkin": "https://steamcommunity.com/market/listings/730/{market_hash_name}",
+      "linkVerificado": true,
+      "taxa": {
+        "comprador": { "percentual": 0, "fixo": 0, "obs": "O preço anunciado já inclui a taxa da Steam; o comprador paga o valor exibido." },
+        "vendedor": { "percentual": 15, "obs": "5% Steam + 10% taxa do jogo (CS2), descontados do vendedor." }
+      },
+      "metodo": "api",
+      "api": {
+        "endpoint": "https://steamcommunity.com/market/priceoverview/?appid=730&currency=7&market_hash_name={market_hash_name}",
+        "oficial": false,
+        "limite": "Não documentado; costuma responder 429 com uso intenso. Usamos 1 chamada a cada 3,5 s e cache de 1 h.",
+        "proxy": "/api/steam-price (o navegador não pode chamar direto por CORS)"
+      },
+      "pagamento": ["Saldo da Carteira Steam"],
+      "observacoes": "Saldo da Steam não pode ser sacado, por isso o preço costuma ser maior que em marketplaces externos.",
+      "verificado": { "data": "2026-10-26", "observacao": "Endpoint público e amplamente usado, mas não documentado oficialmente pela Valve. Moeda 7 = BRL.", "fontes": [] },
+      "confianca": "alta"
+    },
+    {
+      "id": "skinport",
+      "nome": "Skinport",
+      "url": "https://skinport.com",
+      "pais": "internacional",
+      "moeda": "BRL",
+      "tipo": "marketplace",
+      "status": "ativo",
+      "linkSkin": null,
+      "linkVerificado": true,
+      "linkObs": "Usa o campo item_page devolvido pela API (link direto do item).",
+      "taxa": {
+        "comprador": { "percentual": null, "fixo": null, "obs": "Não verificado se há taxa de pagamento no checkout; tratamos o preço da API como preço final estimado." },
+        "vendedor": { "percentual": null, "obs": "Não verificado." }
+      },
+      "metodo": "api",
+      "api": {
+        "endpoint": "https://api.skinport.com/v1/items?app_id=730&currency=BRL",
+        "oficial": true,
+        "documentacao": "https://docs.skinport.com/items",
+        "limite": "8 requisições a cada 5 minutos; exige Accept-Encoding: br. Uma chamada traz a lista inteira; cache de 1 h.",
+        "proxy": "/api/skinport"
+      },
+      "pagamento": ["Não verificado"],
+      "observacoes": "API pública documentada com suporte a BRL.",
+      "verificado": { "data": "2026-10-26", "observacao": "Moeda BRL, limite e exigência de Brotli confirmados na documentação oficial (via busca).", "fontes": ["https://docs.skinport.com/items"] },
+      "confianca": "alta"
+    },
+    {
+      "id": "dashskins",
+      "nome": "DashSkins",
+      "url": "https://dashskins.com.br",
+      "pais": "BR",
+      "moeda": "BRL",
+      "tipo": "marketplace",
+      "status": "proposto",
+      "linkSkin": null,
+      "linkVerificado": false,
+      "taxa": { "comprador": { "percentual": null, "fixo": null, "obs": "Não verificada." } },
+      "metodo": "manual",
+      "metodoObs": "Nenhuma API pública encontrada. Termos de uso não lidos (site inacessível daqui); sem scraping até verificar.",
+      "pagamento": ["Pix", "Cartão", "Cripto (segundo o próprio site)"],
+      "evidencias": [
+        "Reclame Aqui: reputação 'Bom', nota 7,9; 44 reclamações, 100% respondidas, 73,9% resolvidas (dados vistos em resultado de busca).",
+        "Reclamações públicas recorrentes sobre conta restrita/saque bloqueado e reembolso negado com base nos Termos de Serviço.",
+        "App iOS 'DashSkins P2P' com ~4,7 estrelas em ~38 avaliações.",
+        "Matéria do TechTudo (jul/2022) sobre o site; bots da Steam banidos em 2021, problema resolvido segundo a matéria."
+      ],
+      "fontes": [
+        "https://www.reclameaqui.com.br/empresa/dash-skins/",
+        "https://www.techtudo.com.br/noticias/2022/07/dashskins-e-confiavel-conheca-site-de-compra-e-venda-de-skins-para-csgo-esports.ghtml",
+        "https://apps.apple.com/br/app/dashskins-compra-e-venda-skins/id6466506331"
+      ],
+      "verificado": { "data": "2026-10-26", "observacao": "Parcialmente verificado por busca. Tempo de operação: pelo menos desde 2021." },
+      "confianca": "média"
+    },
+    {
+      "id": "bleikstore",
+      "nome": "Bleik Store",
+      "url": "https://bleikstore.com",
+      "pais": "BR",
+      "moeda": "BRL",
+      "tipo": "loja",
+      "status": "proposto",
+      "linkSkin": null,
+      "linkVerificado": false,
+      "taxa": { "comprador": { "percentual": null, "fixo": null, "obs": "Não verificada." } },
+      "metodo": "manual",
+      "metodoObs": "Nenhuma API pública encontrada; termos de uso não verificados.",
+      "pagamento": ["Não verificado"],
+      "evidencias": [
+        "Diz operar desde 2015 (informação da própria loja).",
+        "Trustpilot: nota 4,9 com ~1.700–1.850 avaliações (resultado de busca); empresa não responde a avaliações negativas.",
+        "Reclame Aqui: sem reputação calculada / 'não verificada'; em uma listagem aparece como 'Não recomendada'. Reclamações sobre compra cancelada sem estorno (nov/2025).",
+        "TechTudo (mar/2025) publicou guia sobre a loja."
+      ],
+      "fontes": [
+        "https://www.trustpilot.com/review/bleikstore.com",
+        "https://www.reclameaqui.com.br/empresa/bleik-store/",
+        "https://www.techtudo.com.br/guia/2025/03/bleikstore-e-confiavel-veja-skins-precos-e-mais-da-loja-de-itens-do-cs2-edjogos.ghtml"
+      ],
+      "verificado": { "data": "2026-10-26", "observacao": "Sinais conflitantes entre Trustpilot (alto) e Reclame Aqui (sem reputação/negativo)." },
+      "confianca": "média-baixa"
+    },
+    {
+      "id": "brskins",
+      "nome": "BRSkins",
+      "url": "https://brskins.gg",
+      "pais": "BR",
+      "moeda": "BRL",
+      "tipo": "marketplace",
+      "status": "proposto",
+      "linkSkin": null,
+      "linkVerificado": false,
+      "taxa": { "comprador": { "percentual": null, "fixo": null, "obs": "Não verificada." } },
+      "metodo": "manual",
+      "metodoObs": "Nenhuma API pública encontrada; termos de uso não verificados.",
+      "pagamento": ["Pix", "Cartão em até 12x (segundo o próprio site)"],
+      "evidencias": [
+        "CNPJ 51.654.404/0001-30 (Brskins Servicos Digitais LTDA, Hortolândia/SP), consistente entre o site e a Econodata; não conferido na Receita Federal.",
+        "Reclame Aqui: empresa verificada, mas sem reputação (menos de 10 reclamações avaliadas).",
+        "Trustpilot: 4,5 com 46 avaliações não convidadas (o site anuncia 4,8).",
+        "Fundação entre 2023 e 2024 (fontes divergem)."
+      ],
+      "fontes": [
+        "https://www.reclameaqui.com.br/empresa/brskins-gg/",
+        "https://pt.trustpilot.com/review/brskins.gg",
+        "https://www.econodata.com.br/consulta-empresa/51654404000130-BRSKINS-SERVICOS-DIGITAIS-LTDA"
+      ],
+      "verificado": { "data": "2026-10-26", "observacao": "Empresa registrada, mas pouco histórico público." },
+      "confianca": "baixa-média"
+    },
+    {
+      "id": "neshastore",
+      "nome": "NeshaStore",
+      "url": "https://neshastore.com",
+      "pais": "BR",
+      "moeda": "BRL",
+      "tipo": "loja",
+      "status": "proposto",
+      "linkSkin": null,
+      "linkVerificado": false,
+      "taxa": { "comprador": { "percentual": null, "fixo": null, "obs": "Não verificada." } },
+      "metodo": "manual",
+      "metodoObs": "Foco aparente em comprar skins do usuário (pagamento via Pix), não em vendê-las; termos não verificados.",
+      "pagamento": ["Pix (para quem vende)"],
+      "evidencias": [
+        "Domínio registrado há cerca de 16 anos (siteconfiavel.com.br).",
+        "Afirma mais de 900 mil transações (informação da própria loja).",
+        "Ao menos uma reclamação no Reclame Aqui (abr/2025), sem resposta; sem reputação consolidada encontrada."
+      ],
+      "fontes": [
+        "https://www.siteconfiavel.com.br/site/neshastore-com",
+        "https://www.reclameaqui.com.br/neshastore/na-neshastore_rEE2VkVWNII9i3XX/"
+      ],
+      "verificado": { "data": "2026-10-26", "observacao": "Não verificado: pouca evidência independente." },
+      "confianca": "baixa"
+    },
+    {
+      "id": "cubeskins",
+      "nome": "CubeSKINs",
+      "url": "https://cubeskins.club",
+      "pais": "BR",
+      "moeda": "BRL",
+      "tipo": "marketplace",
+      "status": "proposto",
+      "linkSkin": null,
+      "linkVerificado": false,
+      "taxa": { "comprador": { "percentual": null, "fixo": null, "obs": "Não verificada." } },
+      "metodo": "manual",
+      "metodoObs": "Nenhuma API pública encontrada.",
+      "pagamento": ["Pix (segundo o próprio site)"],
+      "evidencias": [
+        "Domínio com poucos meses de vida e dono oculto no WHOIS.",
+        "Avaliações automáticas muito baixas (ScamAdviser 0, Gridinsoft 1/100) — baseadas em sinais do domínio, não em clientes.",
+        "Sem avaliações independentes encontradas; divulgação no Dust2 marcada como patrocinada.",
+        "CNPJ informado pelo próprio site (68.915.333/0001-84), não conferido."
+      ],
+      "fontes": [
+        "https://www.scamadviser.com/check-website/cubeskins.club",
+        "https://www.dust2.com.br/noticias/77808/patrocinado-conheca-a-cubeskins-que-permite-comprar-e-vender-skins-via-pix"
+      ],
+      "verificado": { "data": "2026-10-26", "observacao": "Não verificado. Não recomendado até ter histórico." },
+      "confianca": "baixa"
+    }
+  ]
+}

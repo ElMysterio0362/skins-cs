@@ -25,7 +25,7 @@ export function renderFooter() {
       <ul>
         <li>Catálogo e imagens: <a href="https://github.com/ByMykel/CSGO-API" rel="noopener" target="_blank">ByMykel/CSGO-API</a></li>
         <li>Catálogo: ${escapeHtml(String(meta?.count ?? '—'))} skins · ${escapeHtml(date)} (${escapeHtml(origin)})</li>
-        <li>Preços: ainda não disponíveis nesta versão.</li>
+        <li>Preços: <a href="https://steamcommunity.com/market/" rel="noopener" target="_blank">Mercado da Steam</a>, <a href="https://skinport.com" rel="noopener" target="_blank">Skinport</a> e importação manual — veja <a href="#/sites">Comparador de sites</a>.</li>
       </ul>
     </section>
     <section>

@@ -14,7 +14,6 @@ export function renderNotFound(main, message = 'A página que você procurou nã
 const PLANNED = {
   kits: { title: 'Meus kits', phase: 5, text: 'Monte kits com slots de Faca, Luvas, Rifles, AWP, Pistolas, SMGs e Escopetas, com orçamento e total por loja.' },
   favoritos: { title: 'Favoritos', phase: 6, text: 'Salve skins favoritas e crie alertas locais de preço.' },
-  sites: { title: 'Comparador de sites', phase: 3, text: 'Lista de marketplaces com país, moeda, taxas, método de obtenção de preço e status de verificação.' },
 };
 
 export function renderPlanned(main, key) {
@@ -42,7 +41,9 @@ export function renderAbout(main, catalog) {
     <p>O navegador desenha cada imagem num &lt;canvas&gt; pequeno (48×48), ignora o fundo transparente e conta os pixels por família de cor (vermelho, azul, verde, dourado, preto etc.). Cores saturadas pesam um pouco mais que tons de cinza, para o metal da arma não dominar. É uma estimativa automática e pode errar em skins com muitas cores.</p>
     <p>O resultado fica salvo no seu navegador. Se a CDN de imagens não permitir leitura de pixels (CORS), o site tenta o proxy local do <code>server.mjs</code>.</p>
     <h2>E os preços?</h2>
-    <p>Ainda não há preços nesta versão. Quando houver, cada valor mostrará a fonte e a data/hora da última atualização, e preços estimados ou manuais nunca serão apresentados como tempo real.</p>
+    <p>Fontes automáticas: Mercado da Comunidade Steam (endpoint público não oficial, uma skin por vez, no máximo 1 consulta a cada 3,5 s) e Skinport (API pública oficial, lista inteira numa chamada, limite de 8 consultas a cada 5 min). As duas são consultadas pelo servidor do site (<code>server.mjs</code> ou Vercel), porque o navegador não pode chamá-las direto. Os resultados ficam em cache por 1 hora.</p>
+    <p>Sites sem API entram por importação manual (CSV/JSON) ou por preço digitado na página da skin. Nenhum site é raspado (scraping) sem verificar os termos de uso.</p>
+    <p>Cada preço mostra a fonte, o tipo (API em cache, manual ou importado) e a data/hora. Preços manuais e importados nunca são apresentados como tempo real. Valores podem estar desatualizados; confira sempre na loja.</p>
     <h2>Meus dados</h2>
     <p>Tudo fica no seu navegador (localStorage e IndexedDB). Limpar os dados do site apaga preferências e cache.</p>
   </article>`;
